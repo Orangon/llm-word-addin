@@ -1,0 +1,1309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Claude for Word — User Manual</title>
+    <style>
+        :root {
+            --primary: #5b6cff;
+            --primary-light: #8c97ff;
+            --primary-dark: #3f4edb;
+            --text: #0f172a;
+            --text-light: #64748b;
+            --bg: #f4f7ff;
+            --bg-white: #ffffff;
+            --border: #e2e8f0;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --error: #ef4444;
+            --info: #3b82f6;
+            --shadow-sm: 0 6px 20px rgba(15, 23, 42, 0.06);
+            --shadow-md: 0 14px 36px rgba(15, 23, 42, 0.12);
+            --radius-lg: 16px;
+            --radius-md: 12px;
+            --radius-sm: 10px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.72;
+            color: var(--text);
+            background:
+                radial-gradient(1200px 520px at 90% -5%, rgba(92, 108, 255, 0.10), transparent 60%),
+                radial-gradient(900px 420px at -8% 10%, rgba(59, 130, 246, 0.08), transparent 58%),
+                var(--bg);
+            -webkit-font-smoothing: antialiased;
+            text-rendering: optimizeLegibility;
+        }
+
+        .container {
+            max-width: 1040px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        header {
+            background:
+                linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 3.6rem 0 3.2rem;
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+            box-shadow: inset 0 -1px 0 rgba(255, 255, 255, 0.2);
+        }
+
+        header::after {
+            content: "";
+            position: absolute;
+            width: 540px;
+            height: 540px;
+            top: -330px;
+            right: -140px;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.24) 0%, rgba(255, 255, 255, 0) 70%);
+            pointer-events: none;
+        }
+
+        header h1 {
+            font-size: clamp(2rem, 4vw, 2.9rem);
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.02em;
+            line-height: 1.2;
+        }
+
+        header p {
+            font-size: 1.1rem;
+            opacity: 0.92;
+            max-width: 70ch;
+        }
+
+        nav {
+            background: var(--bg-white);
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid rgba(91, 108, 255, 0.10);
+        }
+
+        nav h2 {
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+            letter-spacing: -0.01em;
+        }
+
+        nav ul {
+            list-style: none;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 0.5rem;
+        }
+
+        nav a {
+            color: var(--text);
+            text-decoration: none;
+            padding: 0.55rem 0.8rem;
+            border-radius: 9px;
+            display: block;
+            transition: all 0.2s ease;
+            border: 1px solid transparent;
+        }
+
+        nav a:hover {
+            background: rgba(91, 108, 255, 0.08);
+            color: var(--primary);
+            border-color: rgba(91, 108, 255, 0.16);
+            transform: translateX(2px);
+        }
+
+        section {
+            background: var(--bg-white);
+            border-radius: var(--radius-lg);
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid rgba(15, 23, 42, 0.06);
+        }
+
+        h2 {
+            font-size: clamp(1.45rem, 2.4vw, 1.9rem);
+            color: var(--primary);
+            margin-bottom: 1rem;
+            padding-bottom: 0.6rem;
+            border-bottom: 2px solid var(--border);
+            letter-spacing: -0.015em;
+        }
+
+        h3 {
+            font-size: 1.35rem;
+            color: var(--text);
+            margin: 1.65rem 0 0.8rem;
+            letter-spacing: -0.01em;
+        }
+
+        h4 {
+            font-size: 1.1rem;
+            color: var(--text);
+            margin: 1.25rem 0 0.5rem;
+            letter-spacing: -0.005em;
+        }
+
+        p {
+            margin-bottom: 1rem;
+            color: #1f2a44;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin: 1rem 0;
+            font-size: 0.95rem;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            overflow: hidden;
+            background: #fff;
+        }
+
+        th, td {
+            padding: 0.75rem 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+            vertical-align: top;
+        }
+
+        th {
+            background: #eef2ff;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        tr:hover {
+            background: #f8faff;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        code {
+            background: #eef2ff;
+            padding: 0.2rem 0.4rem;
+            border-radius: 6px;
+            font-size: 0.9em;
+            font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Fira Code', monospace;
+            color: #334155;
+        }
+
+        pre {
+            background: #1e293b;
+            color: #e2e8f0;
+            padding: 1.25rem;
+            border-radius: var(--radius-md);
+            overflow-x: auto;
+            margin: 1rem 0;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            border: 1px solid rgba(148, 163, 184, 0.26);
+        }
+
+        pre code {
+            background: none;
+            padding: 0;
+            color: inherit;
+        }
+
+        .info-box {
+            background: #eff6ff;
+            border: 1px solid #bfdbfe;
+            border-left: 5px solid var(--info);
+            padding: 1rem 1.25rem;
+            border-radius: 0 var(--radius-md) var(--radius-md) 0;
+            margin: 1rem 0;
+        }
+
+        .warning-box {
+            background: #fffbeb;
+            border: 1px solid #fde68a;
+            border-left: 5px solid var(--warning);
+            padding: 1rem 1.25rem;
+            border-radius: 0 var(--radius-md) var(--radius-md) 0;
+            margin: 1rem 0;
+        }
+
+        .success-box {
+            background: #ecfdf5;
+            border: 1px solid #a7f3d0;
+            border-left: 5px solid var(--success);
+            padding: 1rem 1.25rem;
+            border-radius: 0 var(--radius-md) var(--radius-md) 0;
+            margin: 1rem 0;
+        }
+
+        .error-box {
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+            border-left: 5px solid var(--error);
+            padding: 1rem 1.25rem;
+            border-radius: 0 var(--radius-md) var(--radius-md) 0;
+            margin: 1rem 0;
+        }
+
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.15rem;
+            margin: 1rem 0;
+        }
+
+        .card {
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            padding: 1.25rem;
+            transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+            background: linear-gradient(180deg, #ffffff 0%, #fcfdff 100%);
+        }
+
+        .card:hover {
+            box-shadow: var(--shadow-md);
+            transform: translateY(-2px);
+            border-color: rgba(91, 108, 255, 0.24);
+        }
+
+        .card h4 {
+            margin-top: 0;
+            color: var(--primary);
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            border: 1px solid transparent;
+        }
+
+        .badge-primary {
+            background: #e0e7ff;
+            color: var(--primary-dark);
+            border-color: #c7d2fe;
+        }
+
+        .badge-success {
+            background: #d1fae5;
+            color: #065f46;
+            border-color: #a7f3d0;
+        }
+
+        .badge-warning {
+            background: #fef3c7;
+            color: #92400e;
+            border-color: #fde68a;
+        }
+
+        .badge-info {
+            background: #dbeafe;
+            color: #1e40af;
+            border-color: #bfdbfe;
+        }
+
+        .layout-diagram {
+            background: #f1f5f9;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            padding: 1.5rem;
+            font-family: 'SF Mono', 'Monaco', monospace;
+            font-size: 0.85rem;
+            line-height: 1.4;
+            overflow-x: auto;
+            white-space: pre;
+        }
+
+        .toc {
+            columns: 2;
+            column-gap: 2rem;
+        }
+
+        .toc li {
+            break-inside: avoid;
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-light);
+            font-size: 0.9rem;
+            margin-top: 0.6rem;
+        }
+
+        a {
+            color: var(--primary-dark);
+            text-underline-offset: 2px;
+        }
+
+        a:hover {
+            color: var(--primary);
+        }
+
+        ::selection {
+            background: rgba(91, 108, 255, 0.2);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            header h1 {
+                font-size: 1.75rem;
+            }
+
+            .toc {
+                columns: 1;
+            }
+
+            .card-grid {
+                grid-template-columns: 1fr;
+            }
+
+            section,
+            nav {
+                padding: 1.15rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Claude for Word — User Manual</h1>
+            <p>A comprehensive guide to all features, modes, and controls of the Claude for Word add-in.</p>
+        </div>
+    </header>
+
+    <div class="container">
+        <nav>
+            <h2>Table of Contents</h2>
+            <ul>
+                <li><a href="#overview">Overview</a></li>
+                <li><a href="#getting-started">Getting Started</a></li>
+                <li><a href="#interface-layout">Interface Layout</a></li>
+                <li><a href="#context-modes">Context Modes</a></li>
+                <li><a href="#edit-modes">Edit Modes (Action Modes)</a></li>
+                <li><a href="#track-changes">Track Changes</a></li>
+                <li><a href="#quick-actions">Quick Action Chips</a></li>
+                <li><a href="#custom-instructions">Custom Instructions</a></li>
+                <li><a href="#settings">Settings</a></li>
+                <li><a href="#chat-mode">Chat Mode Details</a></li>
+                <li><a href="#error-handling">Error Handling</a></li>
+                <li><a href="#keyboard-shortcuts">Keyboard Shortcuts</a></li>
+                <li><a href="#architecture">Architecture Overview</a></li>
+            </ul>
+        </nav>
+
+        <!-- Overview -->
+        <section id="overview">
+            <h2>Overview</h2>
+            <p><strong>Claude for Word</strong> is a Microsoft Word add-in that integrates Claude AI directly into your document editing workflow. Instead of copying text to a separate chat window, Claude writes output <strong>directly into your Word document</strong>.</p>
+
+            <div class="info-box">
+                <strong>Key concept:</strong> The add-in has two distinct operating modes:
+                <ul>
+                    <li><strong>Document Mode</strong> (default): Claude's output is inserted directly into your Word document</li>
+                    <li><strong>Chat Mode</strong>: A traditional chat interface in the sidebar (fallback for non-insertable responses)</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Getting Started -->
+        <section id="getting-started">
+            <h2>Getting Started</h2>
+            <ol>
+                <li><strong>Install the add-in</strong> in Microsoft Word</li>
+                <li><strong>Configure your API key</strong> — click the ⋮ menu → Settings → enter your Anthropic API key</li>
+                <li><strong>Select text</strong> in your document (or leave empty to work with the full document)</li>
+                <li><strong>Type an instruction</strong> or click a Quick Action chip</li>
+                <li><strong>Click Send</strong> (→) or press Enter</li>
+            </ol>
+        </section>
+
+        <!-- Interface Layout -->
+        <section id="interface-layout">
+            <h2>Interface Layout</h2>
+            <p>The add-in sidebar is organized into these areas:</p>
+
+            <div class="layout-diagram">┌─────────────────────────────────────┐
+│  Claude                    [EN] [⋮] │  ← Header: title, language toggle, settings
+├─────────────────────────────────────┤
+│                                     │
+│  Status Area / Empty State          │  ← Shows what Claude is doing
+│                                     │
+│  Chat Messages (if in Chat mode)    │  ← Conversation history
+│                                     │
+│  ┌─ Quick Action Chips ────────────┐│
+│  │ Rewrite | Summarize | Translate ││  ← One-click actions
+│  │ Formal | Contract | Legal | ... ││
+│  └─────────────────────────────────┘│
+├─────────────────────────────────────┤
+│  ○ Selection  ● Document  ☐ Track  │  ← Context mode + Track Changes
+│  ┌─────────────────────────────────┐│
+│  │ Type an instruction for Claude..││  ← Text input
+│  ├─────────────────────────────────┤│
+│  │ [Replace selection ▼]  Sonnet → ││  ← Edit mode selector + Send
+│  └─────────────────────────────────┘│
+└─────────────────────────────────────┘</div>
+        </section>
+
+        <!-- Context Modes -->
+        <section id="context-modes">
+            <h2>Context Modes</h2>
+            <p>Context modes control <strong>what document content</strong> Claude sees when generating a response. These are the two radio buttons at the bottom of the sidebar.</p>
+
+            <h3>Document Mode</h3>
+            <p><span class="badge badge-primary">Default</span> Radio button: <code>● Document</code></p>
+            <table>
+                <tr>
+                    <th>Aspect</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td><strong>What Claude sees</strong></td>
+                    <td>The entire Word document text</td>
+                </tr>
+                <tr>
+                    <td><strong>When to use</strong></td>
+                    <td>When your instruction relates to the whole document (e.g., "Summarize this document", "Check the overall structure")</td>
+                </tr>
+                <tr>
+                    <td><strong>How it works</strong></td>
+                    <td>Reads all paragraphs from the Word document body via Office.js API</td>
+                </tr>
+                <tr>
+                    <td><strong>Limitations</strong></td>
+                    <td>Very long documents are truncated at ~100,000 characters (~25K tokens)</td>
+                </tr>
+            </table>
+
+            <div class="info-box">
+                <strong>Example workflow:</strong>
+                <ol>
+                    <li>Select <code>● Document</code></li>
+                    <li>Type: "Summarize the key points of this document"</li>
+                    <li>Click Send</li>
+                    <li>Claude reads the full document and generates a summary</li>
+                </ol>
+            </div>
+
+            <h3>Selection Mode</h3>
+            <p>Radio button: <code>○ Selection</code></p>
+            <table>
+                <tr>
+                    <th>Aspect</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td><strong>What Claude sees</strong></td>
+                    <td>Only the text you have selected (highlighted) in Word</td>
+                </tr>
+                <tr>
+                    <td><strong>When to use</strong></td>
+                    <td>When your instruction targets a specific paragraph, sentence, or section</td>
+                </tr>
+                <tr>
+                    <td><strong>How it works</strong></td>
+                    <td>Reads the current selection via <code>document.getSelection()</code></td>
+                </tr>
+                <tr>
+                    <td><strong>Requirement</strong></td>
+                    <td>You must select text first, otherwise some actions will show an error</td>
+                </tr>
+            </table>
+
+            <div class="info-box">
+                <strong>Example workflow:</strong>
+                <ol>
+                    <li>Select/highlight a paragraph in Word</li>
+                    <li>Select <code>○ Selection</code></li>
+                    <li>Type: "Rewrite this more concisely"</li>
+                    <li>Click Send</li>
+                    <li>Claude rewrites only the selected text</li>
+                </ol>
+            </div>
+
+            <h3>How Context is Sent to Claude</h3>
+            <p>The context is <strong>injected into the user message</strong> (not as a system prompt):</p>
+            <pre><code>[Document Context]
+{your document or selection text}
+
+[Request]
+{your instruction}</code></pre>
+
+            <p>For Document Mode in direct-write actions, the format is:</p>
+            <pre><code>{your instruction}
+
+---
+
+{document text}</code></pre>
+        </section>
+
+        <!-- Edit Modes -->
+        <section id="edit-modes">
+            <h2>Edit Modes (Action Modes)</h2>
+            <p>Edit modes control <strong>where Claude's output goes</strong> in your Word document. These are the dropdown options at the bottom-left of the input area.</p>
+
+            <div class="card-grid">
+                <div class="card">
+                    <h4>Replace Selection</h4>
+                    <p><span class="badge badge-warning">Replaces text</span></p>
+                    <p><strong>What it does:</strong> Replaces the currently selected text with Claude's output</p>
+                    <p><strong>When to use:</strong> Rewriting, translating, or reformatting existing text</p>
+                    <p><strong>Requirement:</strong> You must have text selected in the document</p>
+                    <p><strong>Use cases:</strong></p>
+                    <ul>
+                        <li>Rewrite a paragraph</li>
+                        <li>Translate selected text</li>
+                        <li>Change tone of a sentence</li>
+                        <li>Reformat a section</li>
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <h4>Insert After</h4>
+                    <p><span class="badge badge-info">Adds below</span></p>
+                    <p><strong>What it does:</strong> Inserts Claude's output as a new paragraph <strong>after</strong> the current selection</p>
+                    <p><strong>When to use:</strong> Adding commentary, summaries, or supplementary content below existing text</p>
+                    <p><strong>Requirement:</strong> Place your cursor or select text where you want the insertion point</p>
+                    <p><strong>Use cases:</strong></p>
+                    <ul>
+                        <li>Add a summary after a section</li>
+                        <li>Insert commentary after a quote</li>
+                        <li>Add a translation below the original text</li>
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <h4>Insert at End</h4>
+                    <p><span class="badge badge-success">Appends</span></p>
+                    <p><strong>What it does:</strong> Inserts Claude's output at the <strong>end of the document</strong></p>
+                    <p><strong>When to use:</strong> Adding appendices, conclusions, or new sections</p>
+                    <p><strong>Requirement:</strong> None — works regardless of cursor position</p>
+                    <p><strong>Use cases:</strong></p>
+                    <ul>
+                        <li>Add a conclusion or summary at the end</li>
+                        <li>Append an appendix</li>
+                        <li>Add a bibliography or references section</li>
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <h4>Chat Only</h4>
+                    <p><span class="badge badge-primary">Sidebar only</span></p>
+                    <p><strong>What it does:</strong> Shows Claude's response in the sidebar chat, <strong>not in the document</strong></p>
+                    <p><strong>When to use:</strong> Asking questions, getting explanations, or when you don't want to modify the document</p>
+                    <p><strong>Behavior:</strong> Multi-turn conversation — Claude remembers previous messages in the chat</p>
+                    <p><strong>Use cases:</strong></p>
+                    <ul>
+                        <li>"What does this clause mean?"</li>
+                        <li>"Can you explain the legal implications?"</li>
+                        <li>"How should I structure this document?"</li>
+                        <li>General Q&A about the document content</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="warning-box">
+                <strong>Note:</strong> When using Chat Only mode, Claude can see your document context (based on the context mode setting), so you can ask questions about your document.
+            </div>
+        </section>
+
+        <!-- Track Changes -->
+        <section id="track-changes">
+            <h2>Track Changes</h2>
+            <p><strong>Toggle:</strong> <code>☐ Track Changes</code> (checkbox in the mode bar)</p>
+
+            <table>
+                <tr>
+                    <th>Aspect</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td><strong>What it does</strong></td>
+                    <td>When enabled, all text insertions/replacements are recorded as Word Track Changes</td>
+                </tr>
+                <tr>
+                    <td><strong>When to use</strong></td>
+                    <td>When you need to review Claude's edits before accepting them</td>
+                </tr>
+                <tr>
+                    <td><strong>How it works</strong></td>
+                    <td>Temporarily enables Word's Track Changes mode, inserts text, then restores the previous mode</td>
+                </tr>
+                <tr>
+                    <td><strong>Requirement</strong></td>
+                    <td>Word API 1.4+ (available in recent versions of Word)</td>
+                </tr>
+            </table>
+
+            <h3>How Track Changes Works</h3>
+            <ol>
+                <li><strong>Before insertion:</strong> The add-in saves the current Track Changes mode</li>
+                <li><strong>During insertion:</strong> Track Changes is enabled (<code>Word.ChangeTrackingMode.trackAll</code>)</li>
+                <li><strong>Text is inserted</strong> with Track Changes recording</li>
+                <li><strong>After insertion:</strong> The previous Track Changes mode is restored</li>
+            </ol>
+
+            <h3>Visual Example</h3>
+            <div class="card-grid">
+                <div class="card">
+                    <h4>With Track Changes OFF</h4>
+                    <pre><code>Original text here.</code></pre>
+                    <p>→ After rewrite:</p>
+                    <pre><code>Rewritten text here.</code></pre>
+                </div>
+
+                <div class="card">
+                    <h4>With Track Changes ON</h4>
+                    <pre><code>Original text here.    ← shown as deleted (strikethrough, red)
+Rewritten text here.   ← shown as inserted (underline, colored)</code></pre>
+                </div>
+            </div>
+
+            <h3>When to Use Track Changes</h3>
+            <table>
+                <tr>
+                    <th>Scenario</th>
+                    <th>Track Changes</th>
+                </tr>
+                <tr>
+                    <td>Quick draft generation</td>
+                    <td>Off</td>
+                </tr>
+                <tr>
+                    <td>Legal document review</td>
+                    <td><strong>On</strong></td>
+                </tr>
+                <tr>
+                    <td>Collaborative editing</td>
+                    <td><strong>On</strong></td>
+                </tr>
+                <tr>
+                    <td>Translation verification</td>
+                    <td><strong>On</strong></td>
+                </tr>
+                <tr>
+                    <td>Personal note-taking</td>
+                    <td>Off</td>
+                </tr>
+            </table>
+        </section>
+
+        <!-- Quick Actions -->
+        <section id="quick-actions">
+            <h2>Quick Action Chips</h2>
+            <p>Quick actions are one-click buttons that execute predefined instructions. They bypass the text input and use built-in prompts.</p>
+
+            <div class="card-grid">
+                <div class="card">
+                    <h4>✏️ Rewrite</h4>
+                    <p><span class="badge badge-warning">Replace selection</span></p>
+                    <p><strong>Built-in prompt:</strong> "Rewrite this text to be clearer, more professional and fluent"</p>
+                    <p><strong>How it works:</strong></p>
+                    <ol>
+                        <li>Select text in your document</li>
+                        <li>Click "Rewrite"</li>
+                        <li>Claude rewrites the selected text and replaces it in the document</li>
+                    </ol>
+                </div>
+
+                <div class="card">
+                    <h4>📝 Summarize</h4>
+                    <p><span class="badge badge-info">Insert after</span></p>
+                    <p><strong>Built-in prompt:</strong> "Summarize this text concisely"</p>
+                    <p><strong>How it works:</strong></p>
+                    <ol>
+                        <li>Select text or use Document mode</li>
+                        <li>Click "Summarize"</li>
+                        <li>Claude generates a summary and inserts it after the selection</li>
+                    </ol>
+                </div>
+
+                <div class="card">
+                    <h4>🌐 Translate EN</h4>
+                    <p><span class="badge badge-warning">Replace selection</span></p>
+                    <p><strong>Built-in prompt:</strong> "Translate to English"</p>
+                    <p><strong>How it works:</strong></p>
+                    <ol>
+                        <li>Select non-English text</li>
+                        <li>Click "Translate EN"</li>
+                        <li>Claude translates and replaces the selection with English text</li>
+                    </ol>
+                </div>
+
+                <div class="card">
+                    <h4>🛡️ Formal Tone</h4>
+                    <p><span class="badge badge-warning">Replace selection</span></p>
+                    <p><strong>Built-in prompt:</strong> "Rewrite in a formal and professional tone, suitable for legal correspondence"</p>
+                    <p><strong>How it works:</strong></p>
+                    <ol>
+                        <li>Select informal text</li>
+                        <li>Click "Formal tone"</li>
+                        <li>Claude rewrites with formal, professional language</li>
+                    </ol>
+                </div>
+
+                <div class="card">
+                    <h4>📄 Contract Review</h4>
+                    <p><span class="badge badge-info">Insert after</span></p>
+                    <p><strong>Specialized legal analysis:</strong></p>
+                    <ul>
+                        <li>Contracting Parties</li>
+                        <li>Contract Object</li>
+                        <li>Critical Clauses (with severity)</li>
+                        <li>Missing Clauses</li>
+                        <li>Regulatory Compliance</li>
+                        <li>Overall Assessment</li>
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <h4>📖 Legal References</h4>
+                    <p><span class="badge badge-info">Insert after</span></p>
+                    <p><strong>Identifies applicable laws:</strong></p>
+                    <ul>
+                        <li>National Law (Italian Civil Code, etc.)</li>
+                        <li>European Law (EU Regulations, Directives)</li>
+                        <li>Relevant Case Law</li>
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <h4>💬 Text Analysis</h4>
+                    <p><span class="badge badge-primary">Readability view</span></p>
+                    <p><strong>Metrics provided:</strong></p>
+                    <ul>
+                        <li>Word/Sentence/Paragraph count</li>
+                        <li>Reading time</li>
+                        <li>Gulpease Index (Italian)</li>
+                        <li>Flesch-Kincaid (English)</li>
+                        <li>Sentence length distribution</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Custom Instructions -->
+        <section id="custom-instructions">
+            <h2>Custom Instructions</h2>
+            <p>You can type <strong>any instruction</strong> in the text input field. Claude will follow your custom prompt.</p>
+
+            <div class="info-box">
+                <strong>Examples:</strong>
+                <ul>
+                    <li>"Convert this paragraph to bullet points"</li>
+                    <li>"Add a transition sentence between these two sections"</li>
+                    <li>"Check this text for grammar errors"</li>
+                    <li>"Rewrite this in the style of a legal brief"</li>
+                    <li>"Explain what this clause means in simple terms"</li>
+                </ul>
+            </div>
+
+            <p><strong>How custom instructions work:</strong></p>
+            <ol>
+                <li>Type your instruction in the input field</li>
+                <li>The instruction is combined with document context (based on context mode)</li>
+                <li>Claude processes and generates a response</li>
+                <li>The response is handled according to the selected edit mode</li>
+            </ol>
+        </section>
+
+        <!-- Settings -->
+        <section id="settings">
+            <h2>Settings</h2>
+            <p>Access settings via the ⋮ menu button in the header.</p>
+
+            <h3>API Key</h3>
+            <table>
+                <tr>
+                    <th>Setting</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td><strong>Field</strong></td>
+                    <td><code>Anthropic API Key</code></td>
+                </tr>
+                <tr>
+                    <td><strong>Format</strong></td>
+                    <td><code>sk-ant-...</code></td>
+                </tr>
+                <tr>
+                    <td><strong>Storage</strong></td>
+                    <td>Saved locally in browser localStorage</td>
+                </tr>
+                <tr>
+                    <td><strong>Security</strong></td>
+                    <td>Never sent to any server except Anthropic's API</td>
+                </tr>
+                <tr>
+                    <td><strong>Get your key</strong></td>
+                    <td><a href="https://console.anthropic.com/settings/keys" target="_blank">console.anthropic.com/settings/keys</a></td>
+                </tr>
+            </table>
+
+            <div class="success-box">
+                <strong>Security note:</strong> The API key is stored locally on your device. It is only sent directly to the Anthropic API endpoint. The add-in does not send your key to any other server.
+            </div>
+
+            <h3>API Base URL</h3>
+            <table>
+                <tr>
+                    <th>Setting</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td><strong>Field</strong></td>
+                    <td><code>API Base URL</code></td>
+                </tr>
+                <tr>
+                    <td><strong>Default</strong></td>
+                    <td><code>https://api.anthropic.com/v1/messages</code></td>
+                </tr>
+                <tr>
+                    <td><strong>When to change</strong></td>
+                    <td>Using a proxy, enterprise endpoint, or compatible API</td>
+                </tr>
+                <tr>
+                    <td><strong>Format</strong></td>
+                    <td>Must start with <code>http://</code> or <code>https://</code></td>
+                </tr>
+            </table>
+
+            <div class="info-box">
+                <strong>Use cases for custom Base URL:</strong>
+                <ul>
+                    <li>Enterprise proxy servers</li>
+                    <li>API gateways</li>
+                    <li>Compatible third-party services</li>
+                    <li>Local development/testing</li>
+                </ul>
+            </div>
+
+            <h3>Model Selection</h3>
+            <table>
+                <tr>
+                    <th>Model</th>
+                    <th>Speed</th>
+                    <th>Capability</th>
+                    <th>Cost</th>
+                    <th>Best for</th>
+                </tr>
+                <tr>
+                    <td><strong>Sonnet 4.6</strong></td>
+                    <td>Fast</td>
+                    <td>High</td>
+                    <td>Medium</td>
+                    <td>Daily use, balanced performance</td>
+                </tr>
+                <tr>
+                    <td><strong>Opus 4.6</strong></td>
+                    <td>Slower</td>
+                    <td>Highest</td>
+                    <td>High</td>
+                    <td>Complex analysis, critical documents</td>
+                </tr>
+                <tr>
+                    <td><strong>Haiku 4.5</strong></td>
+                    <td>Fastest</td>
+                    <td>Good</td>
+                    <td>Low</td>
+                    <td>Quick edits, simple tasks</td>
+                </tr>
+            </table>
+
+            <h3>Custom Models</h3>
+            <p>You can add custom model IDs if you have access to specialized Claude models.</p>
+            <p><strong>How to add a custom model:</strong></p>
+            <ol>
+                <li>In Settings, find the "Custom Models" section</li>
+                <li>Enter a <strong>Display Name</strong> (e.g., "My Custom Model")</li>
+                <li>Enter the <strong>Model ID</strong> (e.g., <code>my-custom-model-v1</code>)</li>
+                <li>Click "Add model"</li>
+                <li>The model appears in the model dropdown</li>
+            </ol>
+
+            <h3>System Instructions</h3>
+            <table>
+                <tr>
+                    <th>Setting</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td><strong>Field</strong></td>
+                    <td><code>System Instructions</code></td>
+                </tr>
+                <tr>
+                    <td><strong>Purpose</strong></td>
+                    <td>Persistent instructions that apply to all Chat Only conversations</td>
+                </tr>
+                <tr>
+                    <td><strong>Example</strong></td>
+                    <td>"Always reply in English. Use a formal and professional tone."</td>
+                </tr>
+            </table>
+
+            <div class="warning-box">
+                <strong>Note:</strong> System instructions are only used in Chat Only mode. Document mode uses a special system prompt (<code>RAW_OUTPUT_SYSTEM</code>) that forces Claude to output text directly insertable into the document.
+            </div>
+        </section>
+
+        <!-- Chat Mode Details -->
+        <section id="chat-mode">
+            <h2>Chat Mode Details</h2>
+            <p>When using <strong>Chat Only</strong> mode, the add-in operates as a traditional chat interface.</p>
+
+            <h3>Multi-turn Conversation</h3>
+            <ul>
+                <li>Claude remembers previous messages in the chat session</li>
+                <li>Each message includes the full conversation history</li>
+                <li>The conversation resets when you reload the add-in</li>
+            </ul>
+
+            <h3>Message Actions</h3>
+            <p>After Claude responds in Chat mode, three action buttons appear:</p>
+            <table>
+                <tr>
+                    <th>Button</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td><strong>Insert at cursor</strong></td>
+                    <td>Inserts the response text at your cursor position in Word</td>
+                </tr>
+                <tr>
+                    <td><strong>Replace selection</strong></td>
+                    <td>Replaces your current selection with the response text</td>
+                </tr>
+                <tr>
+                    <td><strong>Copy</strong></td>
+                    <td>Copies the response text to clipboard</td>
+                </tr>
+            </table>
+
+            <h3>Context in Chat Mode</h3>
+            <p>In Chat mode, document context is injected into the <strong>last user message</strong>:</p>
+            <pre><code>[Document Context]
+{your document or selection text}
+
+[Request]
+{your question}</code></pre>
+            <p>This means Claude always has access to your document content when answering questions.</p>
+        </section>
+
+        <!-- Error Handling -->
+        <section id="error-handling">
+            <h2>Error Handling</h2>
+            <p>The add-in handles various error scenarios gracefully:</p>
+
+            <table>
+                <tr>
+                    <th>Error Type</th>
+                    <th>Message</th>
+                    <th>Solution</th>
+                </tr>
+                <tr>
+                    <td><strong>Authentication</strong></td>
+                    <td>"Invalid API key. Check your settings."</td>
+                    <td>Verify your API key in Settings</td>
+                </tr>
+                <tr>
+                    <td><strong>Rate Limit</strong></td>
+                    <td>"Rate limit reached. Please try again in a few seconds."</td>
+                    <td>Wait a moment and try again</td>
+                </tr>
+                <tr>
+                    <td><strong>Overloaded</strong></td>
+                    <td>"Claude is temporarily overloaded. Please try again shortly."</td>
+                    <td>Wait and retry</td>
+                </tr>
+                <tr>
+                    <td><strong>Network</strong></td>
+                    <td>"Network error. Check your internet connection."</td>
+                    <td>Check your internet connection</td>
+                </tr>
+                <tr>
+                    <td><strong>Context Too Large</strong></td>
+                    <td>"The document is too long. Try selecting only part of the text."</td>
+                    <td>Use Selection mode or select less text</td>
+                </tr>
+                <tr>
+                    <td><strong>No Selection</strong></td>
+                    <td>"Select text in the document before using this action."</td>
+                    <td>Select text first, or change edit mode</td>
+                </tr>
+                <tr>
+                    <td><strong>No API Key</strong></td>
+                    <td>"Configure your API key in settings."</td>
+                    <td>Add your API key in Settings</td>
+                </tr>
+            </table>
+
+            <h3>Meta Response Detection</h3>
+            <p>Sometimes Claude's response cannot be directly inserted into a document (e.g., it's a question, explanation, or instructions). The add-in detects these "meta responses" and automatically redirects them to the chat sidebar.</p>
+
+            <div class="info-box">
+                <strong>Detection patterns:</strong>
+                <ul>
+                    <li>Responses starting with <code>[CHAT]</code></li>
+                    <li>Step-by-step instructions</li>
+                    <li>Apologetic responses ("I'm sorry, I cannot...")</li>
+                    <li>Recommendations ("I recommend...")</li>
+                    <li>Code blocks</li>
+                </ul>
+                <p>When a meta response is detected, you'll see: "Response shown in chat (cannot be inserted into document)."</p>
+            </div>
+        </section>
+
+        <!-- Keyboard Shortcuts -->
+        <section id="keyboard-shortcuts">
+            <h2>Keyboard Shortcuts</h2>
+            <table>
+                <tr>
+                    <th>Key</th>
+                    <th>Action</th>
+                </tr>
+                <tr>
+                    <td><strong>Enter</strong></td>
+                    <td>Send message</td>
+                </tr>
+                <tr>
+                    <td><strong>Shift + Enter</strong></td>
+                    <td>New line in input</td>
+                </tr>
+                <tr>
+                    <td><strong>Escape</strong></td>
+                    <td>Clear input (if focused)</td>
+                </tr>
+            </table>
+        </section>
+
+        <!-- Architecture Overview -->
+        <section id="architecture">
+            <h2>Architecture Overview</h2>
+            <p>For technical understanding, here's how the add-in processes a request:</p>
+
+            <div class="layout-diagram">┌─────────────────────────────────────────────────────────────┐
+│                        User Action                          │
+│  (Type instruction + Click Send, or Click Quick Action)     │
+└──────────────────────────┬──────────────────────────────────┘
+                           │
+                           ▼
+┌─────────────────────────────────────────────────────────────┐
+│                    Context Assembly                          │
+│  ┌───────────────┐    ┌──────────────────┐                  │
+│  │ Full Document  │ OR │ Selected Text    │                  │
+│  │ (Document mode)│    │ (Selection mode) │                  │
+│  └───────┬───────┘    └────────┬─────────┘                  │
+│          └──────────┬──────────┘                            │
+│                     ▼                                       │
+│           ┌────────────────┐                                │
+│           │ truncateText() │  Max 100,000 chars             │
+│           └───────┬────────┘                                │
+└───────────────────┼─────────────────────────────────────────┘
+                    │
+                    ▼
+┌─────────────────────────────────────────────────────────────┐
+│                    Message Construction                      │
+│                                                              │
+│  Document Mode:                                              │
+│    Single message: {instruction} + {context}                 │
+│    System: RAW_OUTPUT_SYSTEM                                 │
+│                                                              │
+│  Chat Mode:                                                  │
+│    Full message history from store.messages                  │
+│    Last message: {context} + {instruction}                   │
+│    System: user-configured systemPrompt                      │
+└──────────────────────────┬──────────────────────────────────┘
+                           │
+                           ▼
+┌─────────────────────────────────────────────────────────────┐
+│                    API Call (SSE Streaming)                   │
+│  AnthropicClient.streamMessage(messages, systemPrompt)       │
+│  → Real-time token streaming                                 │
+└──────────────────────────┬──────────────────────────────────┘
+                           │
+                           ▼
+┌─────────────────────────────────────────────────────────────┐
+│                    Response Handling                          │
+│                                                              │
+│  ┌─────────────────┐    ┌─────────────────────┐             │
+│  │ Document Mode   │    │ Chat Mode            │             │
+│  │                 │    │                      │             │
+│  │ Check if meta   │    │ Show in chat sidebar │             │
+│  │ response        │    │ with action buttons: │             │
+│  │    │            │    │ - Insert at cursor   │             │
+│  │    ├─Yes→ Chat  │    │ - Replace selection  │             │
+│  │    └─No→ Insert │    │ - Copy               │             │
+│  │       into Word │    │                      │             │
+│  └─────────────────┘    └─────────────────────┘             │
+└─────────────────────────────────────────────────────────────┘</div>
+
+            <h3>Data Storage</h3>
+            <table>
+                <tr>
+                    <th>Data</th>
+                    <th>Storage</th>
+                    <th>Persistence</th>
+                </tr>
+                <tr>
+                    <td>API Key</td>
+                    <td>localStorage</td>
+                    <td>Survives browser restart</td>
+                </tr>
+                <tr>
+                    <td>Model selection</td>
+                    <td>localStorage</td>
+                    <td>Survives browser restart</td>
+                </tr>
+                <tr>
+                    <td>System prompt</td>
+                    <td>localStorage</td>
+                    <td>Survives browser restart</td>
+                </tr>
+                <tr>
+                    <td>Base URL</td>
+                    <td>localStorage</td>
+                    <td>Survives browser restart</td>
+                </tr>
+                <tr>
+                    <td>Custom models</td>
+                    <td>localStorage</td>
+                    <td>Survives browser restart</td>
+                </tr>
+                <tr>
+                    <td>Chat messages</td>
+                    <td>In-memory only</td>
+                    <td>Resets on page reload</td>
+                </tr>
+                <tr>
+                    <td>Interface language</td>
+                    <td>localStorage</td>
+                    <td>Survives browser restart</td>
+                </tr>
+            </table>
+        </section>
+
+        <!-- Quick Reference -->
+        <section id="quick-reference">
+            <h2>Quick Reference Card</h2>
+
+            <h3>Context Modes</h3>
+            <table>
+                <tr>
+                    <th>Mode</th>
+                    <th>What Claude Sees</th>
+                    <th>Best For</th>
+                </tr>
+                <tr>
+                    <td><strong>Document</strong></td>
+                    <td>Full document</td>
+                    <td>Whole-document operations</td>
+                </tr>
+                <tr>
+                    <td><strong>Selection</strong></td>
+                    <td>Selected text only</td>
+                    <td>Targeted edits</td>
+                </tr>
+            </table>
+
+            <h3>Edit Modes</h3>
+            <table>
+                <tr>
+                    <th>Mode</th>
+                    <th>Where Output Goes</th>
+                    <th>Best For</th>
+                </tr>
+                <tr>
+                    <td><strong>Replace selection</strong></td>
+                    <td>Replaces selected text</td>
+                    <td>Rewriting, translating</td>
+                </tr>
+                <tr>
+                    <td><strong>Insert after</strong></td>
+                    <td>After selection</td>
+                    <td>Summaries, commentary</td>
+                </tr>
+                <tr>
+                    <td><strong>Insert at end</strong></td>
+                    <td>End of document</td>
+                    <td>Appendices, conclusions</td>
+                </tr>
+                <tr>
+                    <td><strong>Chat only</strong></td>
+                    <td>Sidebar chat</td>
+                    <td>Questions, explanations</td>
+                </tr>
+            </table>
+
+            <h3>Quick Actions</h3>
+            <table>
+                <tr>
+                    <th>Action</th>
+                    <th>What It Does</th>
+                    <th>Default Edit Mode</th>
+                </tr>
+                <tr>
+                    <td><strong>Rewrite</strong></td>
+                    <td>Clearer, more professional text</td>
+                    <td>Replace selection</td>
+                </tr>
+                <tr>
+                    <td><strong>Summarize</strong></td>
+                    <td>Concise summary</td>
+                    <td>Insert after</td>
+                </tr>
+                <tr>
+                    <td><strong>Translate EN</strong></td>
+                    <td>English translation</td>
+                    <td>Replace selection</td>
+                </tr>
+                <tr>
+                    <td><strong>Formal tone</strong></td>
+                    <td>Professional/formal language</td>
+                    <td>Replace selection</td>
+                </tr>
+                <tr>
+                    <td><strong>Contract review</strong></td>
+                    <td>Legal analysis</td>
+                    <td>Insert after</td>
+                </tr>
+                <tr>
+                    <td><strong>Legal refs</strong></td>
+                    <td>Applicable laws/regulations</td>
+                    <td>Insert after</td>
+                </tr>
+                <tr>
+                    <td><strong>Text analysis</strong></td>
+                    <td>Readability metrics</td>
+                    <td>Readability view</td>
+                </tr>
+            </table>
+        </section>
+    </div>
+
+    <footer>
+        <p><strong>Claude for Word</strong> — User Manual — Version Beta</p>
+        <p>Last updated: 2025</p>
+    </footer>
+</body>
+</html>
