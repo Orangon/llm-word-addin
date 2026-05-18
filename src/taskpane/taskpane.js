@@ -132,6 +132,220 @@ function toggleLanguage() {
   updateLanguageUI();
 }
 
+// ============ Chat History Panel ============
+
+function toggleHistoryPanel() {
+  const panel = document.getElementById("history-panel");
+  const btn = document.getElementById("history-toggle-btn");
+  const isVisible = panel.style.display !== "none";
+
+  if (isVisible) {
+    panel.style.display = "none";
+    if (btn) btn.classList.remove("active");
+  } else {
+    renderHistoryList();
+    panel.style.display = "";
+    if (btn) btn.classList.add("active");
+  }
+}
+
+/**
+ * Safely render persisted messages into the history panel.
+ * Sanitises all text via escapeHtml to prevent XSS.
+ */
+function renderHistoryList() {
+  const container = document.getElementById("history-list");
+  const messages = store.get("messages");
+
+  if (!messages || messages.length === 0) {
+    container.innerHTML = `<div class="history-empty">No messages yet</div>`;
+    return;
+  }
+
+  const html = messages
+    .slice()                       // shallow copy so we don't mutate store
+    .reverse()                     // newest first
+    .map((m) => {
+      const roleClass = m.role === "user" ? "history-item__role--user" : "history-item__role--assistant";
+      const roleLabel = m.role === "user" ? "You" : "Claude";
+      const timeStr = m.timestamp ? formatTimestamp(m.timestamp) : "";
+      const text = escapeHtml(m.content || "");
+
+      return `
+        <div class="history-item">
+          <div class="history-item__header">
+            <span class="history-item__role ${roleClass}">${roleLabel}</span>
+            ${timeStr ? `<span class="history-item__time">${timeStr}</span>` : ""}
+          </div>
+          <div class="history-item__text">${text}</div>
+        </div>`;
+    })
+    .join("");
+
+  container.innerHTML = html;
+}
+
+/**
+ * Format a timestamp (Date or ISO string) into a short readable string.
+ */
+function formatTimestamp(ts) {
+  try {
+    const d = ts instanceof Date ? ts : new Date(ts);
+    if (isNaN(d.getTime())) return "";
+    const now = new Date();
+    const isToday = d.toDateString() === now.toDateString();
+    if (isToday) {
+      return d.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+    }
+    return d.toLocaleDateString([], { month: "short", day: "numeric" }) + " " +
+           d.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+  } catch {
+    return "";
+  }
+}
+
+/**
+ * Escape special Markdown characters in plain text so that
+ * the exported Markdown stays readable and safe.
+ */
+function escapeForMarkdown(text) {
+  // Escape characters that Markdown treats as formatting
+  return (text || "")
+    .replace(/\\/g, "\\\\")
+    .replace(/\*/g, "\\*")
+    .replace(/_/g, "\\_")
+    .replace(/`/g, "\\`")
+    .replace(/\[/g, "\\[")
+    .replace(/\]/g, "\\]")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;");
+}
+
+/**
+ * Escape plain text for TXT export (minimal – just angle brackets).
+ */
+function escapeForTxt(text) {
+  return (text || "").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+}
+
+/**
+ * Serialise messages to Markdown format.
+ * Each message becomes a section with a role header and timestamp.
+ */
+function serialiseToMarkdown(messages) {
+  const lines = ["# Claude for Word — Chat History", ""];
+  messages.forEach((m) => {
+    const role = m.role === "user" ? "You" : "Claude";
+    const ts = m.timestamp ? formatTimestamp(m.timestamp) : "";
+    const header = `## ${role}${ts ? " · " + ts : ""}`;
+    lines.push(header, "");
+    // Split content into paragraphs so it reads naturally
+    const escaped = escapeForMarkdown(m.content || "");
+    lines.push(escaped, "");
+  });
+  return lines.join("\n");
+}
+
+/**
+ * Serialise messages to plain-text format.
+ * Simple role-prefixed lines, easy to read in any editor.
+ */
+function serialiseToTxt(messages) {
+  const lines = ["Claude for Word - Chat History", "=".repeat(34), ""];
+  messages.forEach((m) => {
+    const role = m.role === "user" ? "You" : "Claude";
+    const ts = m.timestamp ? formatTimestamp(m.timestamp) : "";
+    lines.push(`[${role}]${ts ? " " + ts : ""}`);
+    lines.push(escapeForTxt(m.content || ""));
+    lines.push("");
+  });
+  return lines.join("\n");
+}
+
+/**
+ * Serialise messages to pretty-printed JSON (array).
+ * Suitable for programmatic backup / re-import.
+ */
+function serialiseToJson(messages) {
+  const exportData = {
+    exportedAt: new Date().toISOString(),
+    source: "Claude for Word",
+    messageCount: messages.length,
+    messages: messages.map((m) => ({
+      role: m.role,
+      content: m.content || "",
+      timestamp: m.timestamp || null,
+    })),
+  };
+  return JSON.stringify(exportData, null, 2);
+}
+
+/**
+ * Trigger a client-side file download using a Blob + temporary anchor.
+ */
+function downloadFile(content, filename, mimeType) {
+  const blob = new Blob([content], { type: mimeType });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  // Clean up after a short delay to allow the download to start
+  setTimeout(() => {
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }, 150);
+}
+
+/**
+ * Export the persisted chat history in the user-chosen format.
+ * Reads store.get('messages'), serialises, and triggers a download.
+ */
+function exportHistory() {
+  const messages = store.get("messages");
+
+  if (!messages || messages.length === 0) {
+    showStatus("info", "No messages to export");
+    return;
+  }
+
+  const formatSelect = document.getElementById("export-format");
+  const format = formatSelect ? formatSelect.value : "markdown";
+
+  let content, extension, mimeType;
+  switch (format) {
+    case "json":
+      content = serialiseToJson(messages);
+      extension = "json";
+      mimeType = "application/json";
+      break;
+    case "txt":
+      content = serialiseToTxt(messages);
+      extension = "txt";
+      mimeType = "text/plain";
+      break;
+    case "markdown":
+    default:
+      content = serialiseToMarkdown(messages);
+      extension = "md";
+      mimeType = "text/markdown";
+      break;
+  }
+
+  // Timestamp for filename: YYYY-MM-DD_HHmmss
+  const now = new Date();
+  const pad = (n) => String(n).padStart(2, "0");
+  const ts =
+    `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}` +
+    `_${pad(now.getHours())}${pad(now.getMinutes())}${pad(now.getSeconds())}`;
+
+  const filename = `chat-history_${ts}.${extension}`;
+  downloadFile(content, filename, mimeType);
+
+  showStatus("success", `Exported ${messages.length} messages`);
+}
+
 function syncUiFromStore() {
   const contextMode = store.get("contextMode");
   const selectedRadio = document.querySelector(`input[name="context-mode"][value="${contextMode}"]`);
@@ -169,6 +383,12 @@ function setupEventListeners() {
         break;
       case "toggle-language":
         toggleLanguage();
+        break;
+      case "toggle-history":
+        toggleHistoryPanel();
+        break;
+      case "export-history":
+        exportHistory();
         break;
       case "send-message":
         handleSend();

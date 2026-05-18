@@ -130,6 +130,12 @@
                 <div class="card-header">
                     <span class="badge">Beta</span>
                     <div class="card-header__right">
+                        <button class="header__btn" data-action="toggle-history" id="history-toggle-btn" title="Chat History">
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"/>
+                                <polyline points="12 6 12 12 16 14"/>
+                            </svg>
+                        </button>
                         <button class="header__btn" data-action="show-settings" data-i18n-title="menu" title="Menu">
                             <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
                                 <circle cx="12" cy="12" r="1.5"/>
@@ -185,6 +191,35 @@
 
                 <!-- Activity log (minimal) -->
                 <div id="activity-log" class="activity-log"></div>
+            </div>
+
+            <!-- Chat History Panel (hidden by default) -->
+            <div id="history-panel" class="history-panel" style="display:none">
+                <div class="history-panel__header">
+                    <span class="history-panel__title">Chat History</span>
+                    <button class="header__btn" data-action="toggle-history" title="Close">
+                        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="18" y1="6" x2="6" y2="18"/>
+                            <line x1="6" y1="6" x2="18" y2="18"/>
+                        </svg>
+                    </button>
+                </div>
+                <div class="history-panel__toolbar">
+                    <select id="export-format" class="export-format-select">
+                        <option value="markdown" selected>Markdown</option>
+                        <option value="txt">TXT</option>
+                        <option value="json">JSON</option>
+                    </select>
+                    <button class="btn btn--ghost btn--sm" data-action="export-history">
+                        <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/>
+                            <polyline points="7 10 12 15 17 10"/>
+                            <line x1="12" y1="15" x2="12" y2="3"/>
+                        </svg>
+                        <span>Export</span>
+                    </button>
+                </div>
+                <div id="history-list" class="history-list"></div>
             </div>
         </div>
 
