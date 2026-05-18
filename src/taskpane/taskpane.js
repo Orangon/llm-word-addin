@@ -384,6 +384,13 @@ function setupEventListeners() {
       case "toggle-language":
         toggleLanguage();
         break;
+      case "change-model":
+        showView("settings");
+        setTimeout(() => {
+          const modelSelect = document.getElementById("model-select");
+          if (modelSelect) modelSelect.focus();
+        }, 50);
+        break;
       case "toggle-history":
         toggleHistoryPanel();
         break;
