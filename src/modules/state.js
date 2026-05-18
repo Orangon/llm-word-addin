@@ -6,7 +6,8 @@ const STORAGE_PREFIX = "claude-word-";
 const LEGACY_SESSION_STORAGE_PREFIX = "session-";
 export const DEFAULT_BASE_URL = "https://api.anthropic.com/v1/messages";
 const PERSISTED_KEYS = ["apiKey", "model", "systemPrompt", "baseUrl"];
-const JSON_PERSISTED_KEYS = ["customModels"];
+const JSON_PERSISTED_KEYS = ["customModels", "messages"];
+const MAX_PERSISTED_MESSAGES = 200;
 
 export class Store {
   constructor() {
@@ -102,7 +103,12 @@ export class Store {
       try {
         const raw = localStorage.getItem(STORAGE_PREFIX + key);
         if (raw !== null) {
-          this._state[key] = JSON.parse(raw);
+          const parsed = JSON.parse(raw);
+          if (key === "messages" && Array.isArray(parsed)) {
+            this._state[key] = parsed.slice(-MAX_PERSISTED_MESSAGES);
+          } else {
+            this._state[key] = parsed;
+          }
         }
       } catch (e) {
         // Storage may not be available or JSON is invalid
@@ -126,6 +132,11 @@ export class Store {
     try {
       if (value === null || value === undefined) {
         localStorage.removeItem(STORAGE_PREFIX + key);
+      } else if (key === "messages" && Array.isArray(value)) {
+        localStorage.setItem(
+          STORAGE_PREFIX + key,
+          JSON.stringify(value.slice(-MAX_PERSISTED_MESSAGES))
+        );
       } else {
         localStorage.setItem(STORAGE_PREFIX + key, JSON.stringify(value));
       }
