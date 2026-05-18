@@ -7,6 +7,10 @@ const translations = {
     // Header
     headerTitle: "Claude",
     settings: "Impostazioni",
+    menu: "Menu",
+    send: "Invia",
+    showHide: "Mostra/Nascondi",
+    trackChangesTitle: "Revisioni",
 
     // Settings
     settingsTitle: "Impostazioni",
@@ -132,12 +136,49 @@ const translations = {
     customModelAdded: "Modello personalizzato aggiunto.",
     customModelFieldsRequired: "Inserisci sia il nome che l'ID del modello.",
     customModelIdExists: "Esiste gia' un modello con questo ID.",
+
+    // Quick actions prompt labels
+    quickRewritePrompt: "Riscrivi questo testo in modo piu' chiaro, professionale e fluido:",
+    quickSummarizePrompt: "Riassumi questo testo in modo conciso:",
+    quickTranslatePrompt: "Traduci in inglese:",
+    quickFormalPrompt: "Riscrivi con tono formale e professionale, adatto alla corrispondenza legale:",
+    quickLabelRewriting: "Riscrittura",
+    quickLabelSummary: "Riassunto",
+    quickLabelTranslationEn: "Traduzione EN",
+    quickLabelFormalTone: "Tono formale",
+    quickLabelContractReview: "Revisione Contratto",
+    quickLabelLegalReferences: "Riferimenti Normativi",
+
+    // Generic/system
+    contextDocumentLabel: "Contesto del documento",
+    requestLabel: "Richiesta",
+    userAvatar: "Tu",
+    customModelsSeparator: "--- Modelli personalizzati ---",
+    errorPrefix: "Errore:",
+    errorUnknown: "Errore sconosciuto. Riprova.",
+    errorInvalidApiKey: "API key non valida. Controlla le impostazioni.",
+    errorRateLimit: "Limite di richieste raggiunto. Riprova tra qualche secondo.",
+    errorOverloaded: "Claude e' momentaneamente sovraccarico. Riprova tra poco.",
+    errorNetwork: "Errore di rete. Controlla la connessione internet.",
+    errorContextTooLarge: "Il documento e' troppo lungo. Prova a selezionare solo una parte del testo.",
+    errorConnectionFailed: "Impossibile connettersi al server Anthropic.",
+    errorStreaming: "Errore streaming",
+    errorHttp: "Errore HTTP",
+    errorNotConfigured: "API Key non configurata",
+    errorSelectTextFirst: "Seleziona prima del testo nel documento.",
+    errorBaseUrlProtocol: "La Base URL deve iniziare con http:// o https://.",
+    errorInvalidBaseUrl: "Base URL non valida.",
+    truncationNotice: "[... testo troncato per limiti di contesto ...]",
   },
 
   en: {
     // Header
     headerTitle: "Claude",
     settings: "Settings",
+    menu: "Menu",
+    send: "Send",
+    showHide: "Show/Hide",
+    trackChangesTitle: "Track Changes",
 
     // Settings
     settingsTitle: "Settings",
@@ -263,6 +304,39 @@ const translations = {
     customModelAdded: "Custom model added.",
     customModelFieldsRequired: "Enter both a display name and a model ID.",
     customModelIdExists: "A model with this ID already exists.",
+
+    // Quick actions prompt labels
+    quickRewritePrompt: "Rewrite this text to be clearer, more professional and fluent:",
+    quickSummarizePrompt: "Summarize this text concisely:",
+    quickTranslatePrompt: "Translate to English:",
+    quickFormalPrompt: "Rewrite in a formal and professional tone, suitable for legal correspondence:",
+    quickLabelRewriting: "Rewriting",
+    quickLabelSummary: "Summary",
+    quickLabelTranslationEn: "Translation EN",
+    quickLabelFormalTone: "Formal tone",
+    quickLabelContractReview: "Contract Review",
+    quickLabelLegalReferences: "Legal References",
+
+    // Generic/system
+    contextDocumentLabel: "Document context",
+    requestLabel: "Request",
+    userAvatar: "You",
+    customModelsSeparator: "--- Custom Models ---",
+    errorPrefix: "Error:",
+    errorUnknown: "Unknown error. Please try again.",
+    errorInvalidApiKey: "Invalid API key. Check your settings.",
+    errorRateLimit: "Rate limit reached. Please try again in a few seconds.",
+    errorOverloaded: "Claude is temporarily overloaded. Please try again shortly.",
+    errorNetwork: "Network error. Check your internet connection.",
+    errorContextTooLarge: "The document is too long. Try selecting only part of the text.",
+    errorConnectionFailed: "Unable to connect to the Anthropic server.",
+    errorStreaming: "Streaming error",
+    errorHttp: "HTTP error",
+    errorNotConfigured: "API key not configured",
+    errorSelectTextFirst: "Please select text in the document first.",
+    errorBaseUrlProtocol: "Base URL must start with http:// or https://.",
+    errorInvalidBaseUrl: "Invalid Base URL.",
+    truncationNotice: "[... text truncated due to context limits ...]",
   },
 };
 

@@ -26,34 +26,34 @@ let isProcessing = false;
 // Quick action definitions
 const QUICK_ACTIONS = {
   rewrite: {
-    prompt: "Rewrite this text to be clearer, more professional and fluent:",
-    label: "Rewriting",
+    prompt: t("quickRewritePrompt"),
+    label: t("quickLabelRewriting"),
     mode: "replace",
   },
   summarize: {
-    prompt: "Summarize this text concisely:",
-    label: "Summary",
+    prompt: t("quickSummarizePrompt"),
+    label: t("quickLabelSummary"),
     mode: "after",
   },
   translate: {
-    prompt: "Translate to English:",
-    label: "Translation EN",
+    prompt: t("quickTranslatePrompt"),
+    label: t("quickLabelTranslationEn"),
     mode: "replace",
   },
   formal: {
-    prompt: "Rewrite in a formal and professional tone, suitable for legal correspondence:",
-    label: "Formal tone",
+    prompt: t("quickFormalPrompt"),
+    label: t("quickLabelFormalTone"),
     mode: "replace",
   },
   contract: {
     prompt: legalTools.getUserPrefix("contract-review"),
-    label: "Contract Review",
+    label: t("quickLabelContractReview"),
     mode: "after",
     systemPrompt: legalTools.getSystemPrompt("contract-review"),
   },
   normative: {
     prompt: legalTools.getUserPrefix("normative"),
-    label: "Legal References",
+    label: t("quickLabelLegalReferences"),
     mode: "after",
     systemPrompt: legalTools.getSystemPrompt("normative"),
   },
@@ -107,6 +107,12 @@ function updateLanguageUI() {
   document.querySelectorAll("[data-i18n-placeholder]").forEach((el) => {
     const key = el.getAttribute("data-i18n-placeholder");
     el.placeholder = t(key);
+  });
+
+  // Update title attributes
+  document.querySelectorAll("[data-i18n-title]").forEach((el) => {
+    const key = el.getAttribute("data-i18n-title");
+    el.title = t(key);
   });
 
   // Update select options
@@ -476,7 +482,7 @@ async function sendChatMessage(userText) {
   let messageContent = userText;
   if (documentContext) {
     const { text: truncatedContext } = truncateText(documentContext);
-    messageContent = `[Contesto del documento]\n${truncatedContext}\n\n[Richiesta]\n${userText}`;
+    messageContent = `[${t("contextDocumentLabel")}]\n${truncatedContext}\n\n[${t("requestLabel")}]\n${userText}`;
   }
 
   // Show in chat UI
@@ -550,7 +556,7 @@ async function handleMessageAction(action, rawText) {
         break;
     }
   } catch (error) {
-    showStatus("error", "Errore: " + error.message);
+    showStatus("error", `${t("errorPrefix")} ${error.message}`);
   }
 }
 

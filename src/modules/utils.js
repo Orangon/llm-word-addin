@@ -22,29 +22,54 @@ export function generateId() {
 
 export function truncateText(text, maxChars = 100000) {
   if (text.length <= maxChars) return { text, truncated: false };
+  const lang = localStorage.getItem("claude-word-lang") || "en";
+  const truncationNotice = lang === "it"
+    ? "[... testo troncato per limiti di contesto ...]"
+    : "[... text truncated due to context limits ...]";
   return {
-    text: text.slice(0, maxChars) + "\n\n[... testo troncato per limiti di contesto ...]",
+    text: text.slice(0, maxChars) + `\n\n${truncationNotice}`,
     truncated: true,
   };
 }
 
 export function formatError(error) {
+  const lang = localStorage.getItem("claude-word-lang") || "en";
+  const labels = {
+    it: {
+      invalidApiKey: "API key non valida. Controlla le impostazioni.",
+      rateLimit: "Limite di richieste raggiunto. Riprova tra qualche secondo.",
+      overloaded: "Claude e' momentaneamente sovraccarico. Riprova tra poco.",
+      network: "Errore di rete. Controlla la connessione internet.",
+      contextTooLarge: "Il documento e' troppo lungo. Prova a selezionare solo una parte del testo.",
+      unknown: "Errore sconosciuto. Riprova.",
+    },
+    en: {
+      invalidApiKey: "Invalid API key. Check your settings.",
+      rateLimit: "Rate limit reached. Please try again in a few seconds.",
+      overloaded: "Claude is temporarily overloaded. Please try again shortly.",
+      network: "Network error. Check your internet connection.",
+      contextTooLarge: "The document is too long. Try selecting only part of the text.",
+      unknown: "Unknown error. Please try again.",
+    },
+  };
+  const i18n = labels[lang] || labels.en;
+
   if (error.type === "authentication") {
-    return "API key non valida. Controlla le impostazioni.";
+    return i18n.invalidApiKey;
   }
   if (error.type === "rate_limit") {
-    return "Limite di richieste raggiunto. Riprova tra qualche secondo.";
+    return i18n.rateLimit;
   }
   if (error.type === "overloaded") {
-    return "Claude e' momentaneamente sovraccarico. Riprova tra poco.";
+    return i18n.overloaded;
   }
   if (error.type === "network") {
-    return "Errore di rete. Controlla la connessione internet.";
+    return i18n.network;
   }
   if (error.type === "context_too_large") {
-    return "Il documento e' troppo lungo. Prova a selezionare solo una parte del testo.";
+    return i18n.contextTooLarge;
   }
-  return error.message || "Errore sconosciuto. Riprova.";
+  return error.message || i18n.unknown;
 }
 
 export function countWords(text) {

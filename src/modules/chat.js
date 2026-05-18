@@ -4,6 +4,7 @@
 
 import { markdownToHtml } from "./markdown.js";
 import { generateId } from "./utils.js";
+import { t } from "./i18n.js";
 
 export class ChatUI {
   constructor(containerEl, emptyStateEl) {
@@ -102,7 +103,7 @@ export class ChatUI {
   _createMessageEl(role, text) {
     const el = document.createElement("div");
     el.className = `message message--${role} fade-in`;
-    const avatar = role === "user" ? "Tu" : "C";
+    const avatar = role === "user" ? t("userAvatar") : "C";
     const renderedText = role === "user" ? this._escapeHtml(text) : markdownToHtml(text);
 
     el.innerHTML = `

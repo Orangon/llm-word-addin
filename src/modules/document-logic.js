@@ -8,6 +8,7 @@ import { store } from "./state.js";
 import { AnthropicClient } from "./api-client.js";
 import { legalTools } from "./legal.js";
 import { truncateText } from "./utils.js";
+import { t } from "./i18n.js";
 
 // System prompt that forces raw output (no headers, no comments)
 export const RAW_OUTPUT_SYSTEM = `You are an assistant integrated into Microsoft Word. Your output will be inserted DIRECTLY into the user's Word document.
@@ -48,7 +49,7 @@ export async function executeDocumentAction({
   onStatusUpdate 
 }) {
   const apiKey = store.get("apiKey");
-  if (!apiKey) throw new Error("API Key not configured");
+  if (!apiKey) throw new Error(t("errorNotConfigured"));
 
   // Read document context
   let documentText = "";
@@ -62,7 +63,7 @@ export async function executeDocumentAction({
   }
 
   if (!documentText.trim() && insertMode === "replace") {
-    throw new Error("Please select text in the document first.");
+    throw new Error(t("errorSelectTextFirst"));
   }
 
   // Build message

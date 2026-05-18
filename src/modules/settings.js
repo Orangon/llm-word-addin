@@ -102,7 +102,7 @@ export class Settings {
       const separator = document.createElement("option");
       separator.disabled = true;
       separator.className = "custom-model-option";
-      separator.textContent = "--- Custom Models ---";
+      separator.textContent = t("customModelsSeparator");
       this.modelSelect.appendChild(separator);
     }
 
@@ -193,7 +193,7 @@ export class Settings {
       const response = await client.testConnection();
       this._showStatus(`${t("connectionOk")} "${response}"`, "success");
     } catch (error) {
-      this._showStatus(`Error: ${error.message}`, "error");
+      this._showStatus(`${t("errorPrefix")} ${error.message}`, "error");
     }
   }
 
@@ -225,10 +225,10 @@ export class Settings {
     try {
       const parsedUrl = new URL(baseUrl);
       if (!["http:", "https:"].includes(parsedUrl.protocol)) {
-        return "Base URL must start with http:// or https://.";
+        return t("errorBaseUrlProtocol");
       }
     } catch {
-      return "Invalid Base URL.";
+      return t("errorInvalidBaseUrl");
     }
 
     return null;

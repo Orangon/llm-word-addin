@@ -4,6 +4,25 @@
 
 import { DEFAULT_BASE_URL } from "./state.js";
 
+function getI18nText(key) {
+  const lang = localStorage.getItem("claude-word-lang") || "en";
+  const dict = {
+    it: {
+      connectionFailed: "Impossibile connettersi al server Anthropic.",
+      testPrompt: "Rispondi solo: OK",
+      streamingError: "Errore streaming",
+      httpError: "Errore HTTP",
+    },
+    en: {
+      connectionFailed: "Unable to connect to the Anthropic server.",
+      testPrompt: "Reply only: OK",
+      streamingError: "Streaming error",
+      httpError: "HTTP error",
+    },
+  };
+  return (dict[lang] || dict.en)[key];
+}
+
 export class ApiError extends Error {
   constructor(message, type, status) {
     super(message);
@@ -50,7 +69,7 @@ export class AnthropicClient {
         body: JSON.stringify(this._buildBody(messages, systemPrompt, true)),
       });
     } catch (e) {
-      throw new ApiError("Impossibile connettersi al server Anthropic.", "network", 0);
+      throw new ApiError(getI18nText("connectionFailed"), "network", 0);
     }
 
     if (!response.ok) {
@@ -99,7 +118,7 @@ export class AnthropicClient {
         body: JSON.stringify(this._buildBody(messages, systemPrompt, false)),
       });
     } catch (e) {
-      throw new ApiError("Impossibile connettersi al server Anthropic.", "network", 0);
+      throw new ApiError(getI18nText("connectionFailed"), "network", 0);
     }
 
     if (!response.ok) {
@@ -113,7 +132,7 @@ export class AnthropicClient {
 
   async testConnection() {
     return this.sendMessage(
-      [{ role: "user", content: "Rispondi solo: OK" }],
+      [{ role: "user", content: getI18nText("testPrompt") }],
       null
     );
   }
@@ -149,7 +168,7 @@ export class AnthropicClient {
     if (eventType === "error" && data) {
       try {
         const parsed = JSON.parse(data);
-        throw new ApiError(parsed.error?.message || "Errore streaming", "api_error", 0);
+        throw new ApiError(parsed.error?.message || getI18nText("streamingError"), "api_error", 0);
       } catch (e) {
         if (e instanceof ApiError) throw e;
       }
@@ -163,10 +182,10 @@ export class AnthropicClient {
     try {
       errorBody = await response.json();
     } catch {
-      errorBody = { error: { message: `HTTP ${response.status}` } };
+      errorBody = { error: { message: `${getI18nText("httpError")} ${response.status}` } };
     }
 
-    const message = errorBody?.error?.message || `Errore HTTP ${response.status}`;
+    const message = errorBody?.error?.message || `${getI18nText("httpError")} ${response.status}`;
 
     switch (response.status) {
       case 401:
