@@ -7,7 +7,8 @@
     "start": "webpack serve --mode development",
     "build": "webpack --mode production",
     "dev-certs": "office-addin-dev-certs install",
-    "validate": "office-addin-manifest validate manifest.xml"
+    "validate": "office-addin-manifest validate manifest.xml",
+    "update-manifest": "node scripts/update-local-manifest.js"
   },
   "devDependencies": {
     "copy-webpack-plugin": "^12.0.2",
