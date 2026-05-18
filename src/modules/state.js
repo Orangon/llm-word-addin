@@ -4,7 +4,9 @@
 
 const STORAGE_PREFIX = "claude-word-";
 const LEGACY_SESSION_STORAGE_PREFIX = "session-";
-const PERSISTED_KEYS = ["apiKey", "model", "systemPrompt"];
+export const DEFAULT_BASE_URL = "https://api.anthropic.com/v1/messages";
+const PERSISTED_KEYS = ["apiKey", "model", "systemPrompt", "baseUrl"];
+const JSON_PERSISTED_KEYS = ["customModels"];
 
 export class Store {
   constructor() {
@@ -12,11 +14,13 @@ export class Store {
       apiKey: null,
       model: "claude-sonnet-4-6",
       systemPrompt: "",
+      baseUrl: DEFAULT_BASE_URL,
       messages: [],
       isStreaming: false,
       currentView: "chat",
       trackChanges: false,
       contextMode: "full",
+      customModels: [],
     };
     this._listeners = new Map();
     this._hydrate();
@@ -33,6 +37,8 @@ export class Store {
 
     if (PERSISTED_KEYS.includes(key)) {
       this._persist(key, value);
+    } else if (JSON_PERSISTED_KEYS.includes(key)) {
+      this._persistJson(key, value);
     }
 
     const listeners = this._listeners.get(key);
@@ -90,6 +96,18 @@ export class Store {
         // Storage may not be available
       }
     }
+
+    // Hydrate JSON-persisted keys (e.g. customModels array)
+    for (const key of JSON_PERSISTED_KEYS) {
+      try {
+        const raw = localStorage.getItem(STORAGE_PREFIX + key);
+        if (raw !== null) {
+          this._state[key] = JSON.parse(raw);
+        }
+      } catch (e) {
+        // Storage may not be available or JSON is invalid
+      }
+    }
   }
 
   _persist(key, value) {
@@ -98,6 +116,18 @@ export class Store {
         localStorage.removeItem(STORAGE_PREFIX + key);
       } else {
         localStorage.setItem(STORAGE_PREFIX + key, value);
+      }
+    } catch (e) {
+      // Storage may not be available
+    }
+  }
+
+  _persistJson(key, value) {
+    try {
+      if (value === null || value === undefined) {
+        localStorage.removeItem(STORAGE_PREFIX + key);
+      } else {
+        localStorage.setItem(STORAGE_PREFIX + key, JSON.stringify(value));
       }
     } catch (e) {
       // Storage may not be available

@@ -2,6 +2,8 @@
  * Anthropic Messages API client with SSE streaming
  */
 
+import { DEFAULT_BASE_URL } from "./state.js";
+
 export class ApiError extends Error {
   constructor(message, type, status) {
     super(message);
@@ -11,10 +13,10 @@ export class ApiError extends Error {
 }
 
 export class AnthropicClient {
-  constructor(apiKey, model = "claude-sonnet-4-6") {
+  constructor(apiKey, model = "claude-sonnet-4-6", baseUrl = DEFAULT_BASE_URL) {
     this.apiKey = apiKey;
     this.model = model;
-    this.baseUrl = "https://api.anthropic.com/v1/messages";
+    this.baseUrl = baseUrl;
   }
 
   _getHeaders() {

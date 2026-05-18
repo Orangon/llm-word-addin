@@ -12,6 +12,9 @@ import { ChatUI } from "../modules/chat.js";
 import { Settings } from "../modules/settings.js";
 import { legalTools } from "../modules/legal.js";
 import { RAW_OUTPUT_SYSTEM, executeDocumentAction } from "../modules/document-logic.js";
+import { stripMarkdown } from "../modules/markdown.js";
+import { truncateText, formatError } from "../modules/utils.js";
+import { setLanguage, getLanguage, t } from "../modules/i18n.js";
 import "../taskpane/taskpane.css";
 
 let chatUI;
@@ -73,8 +76,8 @@ function initializeApp() {
   settings = new Settings();
   chatUI.setActionHandler(handleMessageAction);
 
-  // Load saved language
-  const savedLang = localStorage.getItem("claude-word-lang") || "it";
+  // Load saved language (default: English)
+  const savedLang = localStorage.getItem("claude-word-lang") || "en";
   setLanguage(savedLang);
   updateLanguageUI();
 
@@ -490,7 +493,7 @@ async function sendChatMessage(userText) {
   const systemPrompt = store.get("systemPrompt") || null;
 
   chatUI.startStreamingMessage();
-  const client = new AnthropicClient(apiKey, store.get("model"));
+  const client = new AnthropicClient(apiKey, store.get("model"), store.get("baseUrl"));
   let fullResponse = "";
 
   try {

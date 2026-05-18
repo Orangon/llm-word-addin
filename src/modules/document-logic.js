@@ -75,7 +75,7 @@ export async function executeDocumentAction({
   const messages = [{ role: "user", content: messageContent }];
   const system = systemPrompt || RAW_OUTPUT_SYSTEM;
 
-  const client = new AnthropicClient(apiKey, store.get("model"));
+  const client = new AnthropicClient(apiKey, store.get("model"), store.get("baseUrl"));
   let fullResponse = "";
 
   for await (const chunk of client.streamMessage(messages, system)) {

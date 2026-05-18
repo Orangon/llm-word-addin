@@ -14,6 +14,8 @@ const translations = {
     apiKeyPlaceholder: "sk-ant-...",
     apiKeyHint: "Ottieni la tua key da",
     apiKeySecurityNote: "La API key viene salvata localmente su questo dispositivo finche' non la cambi o la cancelli.",
+    baseUrlLabel: "URL base API",
+    baseUrlHint: "Endpoint API personalizzato. Lascia vuoto per l'API Anthropic predefinita.",
     modelLabel: "Modello",
     modelRecommended: "consigliato",
     modelCapable: "piu' capace",
@@ -117,6 +119,19 @@ const translations = {
     insertAtCursor: "Inserisci al cursore",
     replaceSelectionAction: "Sostituisci selezione",
     copy: "Copia",
+
+    // Custom models
+    customModelsTitle: "Modelli personalizzati",
+    customModelNameLabel: "Nome visualizzato",
+    customModelNamePlaceholder: "Es: Il mio modello",
+    customModelIdLabel: "ID modello",
+    customModelIdPlaceholder: "Es: my-custom-model-v1",
+    addCustomModel: "Aggiungi modello",
+    noCustomModels: "Nessun modello personalizzato aggiunto.",
+    remove: "Rimuovi",
+    customModelAdded: "Modello personalizzato aggiunto.",
+    customModelFieldsRequired: "Inserisci sia il nome che l'ID del modello.",
+    customModelIdExists: "Esiste gia' un modello con questo ID.",
   },
 
   en: {
@@ -130,6 +145,8 @@ const translations = {
     apiKeyPlaceholder: "sk-ant-...",
     apiKeyHint: "Get your key from",
     apiKeySecurityNote: "Your API key is stored locally on this device until you change or clear it.",
+    baseUrlLabel: "API Base URL",
+    baseUrlHint: "Custom API endpoint URL. Leave empty for the default Anthropic API.",
     modelLabel: "Model",
     modelRecommended: "recommended",
     modelCapable: "most capable",
@@ -233,6 +250,19 @@ const translations = {
     insertAtCursor: "Insert at cursor",
     replaceSelectionAction: "Replace selection",
     copy: "Copy",
+
+    // Custom models
+    customModelsTitle: "Custom Models",
+    customModelNameLabel: "Display name",
+    customModelNamePlaceholder: "e.g. My Custom Model",
+    customModelIdLabel: "Model ID",
+    customModelIdPlaceholder: "e.g. my-custom-model-v1",
+    addCustomModel: "Add model",
+    noCustomModels: "No custom models added yet.",
+    remove: "Remove",
+    customModelAdded: "Custom model added.",
+    customModelFieldsRequired: "Enter both a display name and a model ID.",
+    customModelIdExists: "A model with this ID already exists.",
   },
 };
 

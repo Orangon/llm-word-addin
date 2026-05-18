@@ -360,6 +360,78 @@ html, body {
 .btn--ghost:hover { border-color: var(--accent); color: var(--accent); }
 .btn--sm { padding: 6px 8px; font-size: 12px; }
 
+/* ============ Custom Models ============ */
+.custom-model-form {
+  background: var(--badge-bg);
+  border: 1px solid var(--border-light);
+  border-radius: 10px;
+  padding: 10px;
+}
+
+.custom-model-form__row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.custom-model-form__field {
+  flex: 1;
+  min-width: 0;
+}
+
+.form-label--sm {
+  font-size: 11px;
+  margin-bottom: 4px;
+  color: var(--text-muted);
+}
+
+.custom-models-list {
+  margin-top: 8px;
+}
+
+.custom-models-empty {
+  font-size: 12px;
+  color: var(--text-muted);
+  padding: 8px 0;
+}
+
+.custom-model-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 10px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-light);
+  border-radius: 8px;
+  margin-bottom: 4px;
+}
+
+.custom-model-info {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.custom-model-name {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.custom-model-id {
+  font-size: 11px;
+  color: var(--text-muted);
+  font-family: 'SF Mono', Consolas, monospace;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.custom-model-remove-btn {
+  flex-shrink: 0;
+  padding: 4px !important;
+}
+
 .btn--send {
   width: 32px;
   height: 32px;

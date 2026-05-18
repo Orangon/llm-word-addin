@@ -52,11 +52,17 @@ export function countWords(text) {
   return text.trim().split(/\s+/).length;
 }
 
-export function getModelDisplayName(modelId) {
+export function getModelDisplayName(modelId, customModels = []) {
   const names = {
     "claude-sonnet-4-6": "Sonnet 4.6",
     "claude-opus-4-6": "Opus 4.6",
     "claude-haiku-4-5-20251001": "Haiku 4.5",
   };
-  return names[modelId] || modelId;
+  if (names[modelId]) return names[modelId];
+
+  // Check custom models
+  const custom = customModels.find((m) => m.id === modelId);
+  if (custom) return custom.name;
+
+  return modelId;
 }

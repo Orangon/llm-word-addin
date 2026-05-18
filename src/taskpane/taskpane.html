@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="it">
+<html lang="en">
 <head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
@@ -15,7 +15,7 @@
             <span class="header__title">Claude</span>
             <div class="header__right">
                 <button class="header__btn" id="lang-toggle" data-action="toggle-language" title="IT/EN">
-                    <span class="lang-label">IT</span>
+                    <span class="lang-label">EN</span>
                 </button>
                 <button class="header__btn" data-action="show-settings" title="Impostazioni">
                     <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
@@ -41,6 +41,14 @@
                 </div>
 
                 <div class="form-group">
+                    <label class="form-label" data-i18n="baseUrlLabel">API Base URL</label>
+                    <input type="text" id="base-url-input" class="form-input" placeholder="https://api.anthropic.com/v1/messages" />
+                    <small class="form-hint">
+                        <span data-i18n="baseUrlHint">Custom API endpoint URL. Leave empty for default Anthropic API.</span>
+                    </small>
+                </div>
+
+                <div class="form-group">
                     <label class="form-label" data-i18n="apiKeyLabel">API Key Anthropic</label>
                     <div class="input-row">
                         <input type="password" id="api-key-input" class="form-input" placeholder="sk-ant-..." />
@@ -59,12 +67,30 @@
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label" data-i18n="modelLabel">Modello</label>
+                    <label class="form-label" data-i18n="modelLabel">Model</label>
                     <select id="model-select" class="form-select">
                         <option value="claude-sonnet-4-6">Claude Sonnet 4.6</option>
                         <option value="claude-opus-4-6">Claude Opus 4.6</option>
                         <option value="claude-haiku-4-5-20251001">Claude Haiku 4.5</option>
                     </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" data-i18n="customModelsTitle">Custom Models</label>
+                    <div class="custom-model-form">
+                        <div class="custom-model-form__row">
+                            <div class="custom-model-form__field">
+                                <label class="form-label form-label--sm" data-i18n="customModelNameLabel">Display name</label>
+                                <input type="text" id="custom-model-name" class="form-input" data-i18n-placeholder="customModelNamePlaceholder" placeholder="e.g. My Custom Model" />
+                            </div>
+                            <div class="custom-model-form__field">
+                                <label class="form-label form-label--sm" data-i18n="customModelIdLabel">Model ID</label>
+                                <input type="text" id="custom-model-id" class="form-input" data-i18n-placeholder="customModelIdPlaceholder" placeholder="e.g. my-custom-model-v1" />
+                            </div>
+                        </div>
+                        <button class="btn btn--ghost btn--sm" id="add-custom-model-btn" type="button" data-i18n="addCustomModel">Add model</button>
+                    </div>
+                    <div id="custom-models-list" class="custom-models-list"></div>
                 </div>
 
                 <div class="form-group">
