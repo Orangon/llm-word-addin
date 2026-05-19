@@ -14,6 +14,17 @@
         <header class="header">
             <span class="header__title">Claude</span>
             <div class="header__right">
+                <button class="header__btn" data-action="new-conversation" id="new-conversation-btn" data-i18n-title="newConversation" title="Nuova conversazione">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 5v14M5 12h14"/>
+                    </svg>
+                </button>
+                <button class="header__btn" data-action="toggle-history" id="history-toggle-btn" title="Chat History">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"/>
+                        <polyline points="12 6 12 12 16 14"/>
+                    </svg>
+                </button>
                 <button class="header__btn" id="lang-toggle" data-action="toggle-language" title="IT/EN">
                     <span class="lang-label">EN</span>
                 </button>
@@ -126,24 +137,9 @@
         <!-- Main View -->
         <div id="chat-view" class="view">
             <div class="main-card">
-                <!-- Badge + controls -->
+                <!-- Badge -->
                 <div class="card-header">
                     <span class="badge">Beta</span>
-                    <div class="card-header__right">
-                        <button class="header__btn" data-action="toggle-history" id="history-toggle-btn" title="Chat History">
-                            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
-                                <circle cx="12" cy="12" r="10"/>
-                                <polyline points="12 6 12 12 16 14"/>
-                            </svg>
-                        </button>
-                        <button class="header__btn" data-action="show-settings" data-i18n-title="menu" title="Menu">
-                            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
-                                <circle cx="12" cy="12" r="1.5"/>
-                                <circle cx="12" cy="5" r="1.5"/>
-                                <circle cx="12" cy="19" r="1.5"/>
-                            </svg>
-                        </button>
-                    </div>
                 </div>
 
                 <!-- Status area (shows what Claude is doing) -->

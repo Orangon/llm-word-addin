@@ -11,6 +11,8 @@ const translations = {
     send: "Invia",
     showHide: "Mostra/Nascondi",
     trackChangesTitle: "Revisioni",
+    newConversation: "Nuova conversazione",
+    conversationCleared: "Conversazione cancellata",
 
     // Settings
     settingsTitle: "Impostazioni",
@@ -179,6 +181,8 @@ const translations = {
     send: "Send",
     showHide: "Show/Hide",
     trackChangesTitle: "Track Changes",
+    newConversation: "New conversation",
+    conversationCleared: "Conversation cleared",
 
     // Settings
     settingsTitle: "Settings",

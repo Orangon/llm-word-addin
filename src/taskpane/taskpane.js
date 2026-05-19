@@ -150,6 +150,40 @@ function toggleHistoryPanel() {
 }
 
 /**
+ * Clear the current conversation context and UI.
+ * Resets messages in store and clears the chat messages display.
+ */
+function clearConversation() {
+  // Clear persisted messages
+  store.set("messages", []);
+
+  // Clear chat messages UI
+  const chatMessages = document.getElementById("chat-messages");
+  if (chatMessages) chatMessages.innerHTML = "";
+
+  // Show empty state
+  const emptyState = document.getElementById("empty-state");
+  if (emptyState) emptyState.style.display = "";
+
+  // Hide status area processing indicators
+  const statusArea = document.getElementById("status-area");
+  if (statusArea) {
+    const processing = statusArea.querySelector(".status-processing");
+    if (processing) processing.remove();
+  }
+
+  // Close history panel if open
+  const historyPanel = document.getElementById("history-panel");
+  if (historyPanel && historyPanel.style.display !== "none") {
+    historyPanel.style.display = "none";
+    const btn = document.getElementById("history-toggle-btn");
+    if (btn) btn.classList.remove("active");
+  }
+
+  showStatus("success", t("conversationCleared"));
+}
+
+/**
  * Safely render persisted messages into the history panel.
  * Sanitises all text via escapeHtml to prevent XSS.
  */
@@ -393,6 +427,9 @@ function setupEventListeners() {
         break;
       case "toggle-history":
         toggleHistoryPanel();
+        break;
+      case "new-conversation":
+        clearConversation();
         break;
       case "export-history":
         exportHistory();
