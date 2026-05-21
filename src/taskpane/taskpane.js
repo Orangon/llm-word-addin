@@ -13,7 +13,7 @@ import { Settings } from "../modules/settings.js";
 import { legalTools } from "../modules/legal.js";
 import { RAW_OUTPUT_SYSTEM, executeDocumentAction } from "../modules/document-logic.js";
 import { stripMarkdown } from "../modules/markdown.js";
-import { truncateText, formatError } from "../modules/utils.js";
+import { truncateText, formatError, getModelDisplayName } from "../modules/utils.js";
 import { setLanguage, getLanguage, t } from "../modules/i18n.js";
 import "../taskpane/taskpane.css";
 
@@ -130,6 +130,82 @@ function toggleLanguage() {
   setLanguage(newLang);
   localStorage.setItem("claude-word-lang", newLang);
   updateLanguageUI();
+}
+
+// ============ Model Picker ============
+
+const BUILT_IN_MODELS = [
+  { id: "claude-sonnet-4-6", name: "Sonnet 4.6" },
+  { id: "claude-opus-4-6", name: "Opus 4.6" },
+  { id: "claude-haiku-4-5-20251001", name: "Haiku 4.5" },
+];
+
+function getAvailableModels() {
+  const customModels = store.get("customModels") || [];
+  return [...BUILT_IN_MODELS, ...customModels];
+}
+
+function toggleModelPicker() {
+  const existing = document.getElementById("model-picker");
+  if (existing) {
+    closeModelPicker();
+    return;
+  }
+
+  const models = getAvailableModels();
+  const currentModel = store.get("model");
+
+  const picker = document.createElement("div");
+  picker.id = "model-picker";
+  picker.className = "model-picker";
+
+  models.forEach((m) => {
+    const item = document.createElement("button");
+    item.className = "model-picker__item";
+    if (m.id === currentModel) item.classList.add("model-picker__item--active");
+    item.textContent = m.name;
+    item.addEventListener("click", (e) => {
+      e.stopPropagation();
+      selectModel(m.id);
+    });
+    picker.appendChild(item);
+  });
+
+  document.body.appendChild(picker);
+
+  const indicator = document.getElementById("model-indicator");
+  const rect = indicator.getBoundingClientRect();
+  const pickerRect = picker.getBoundingClientRect();
+  picker.style.right = (window.innerWidth - rect.right) + "px";
+  picker.style.bottom = (window.innerHeight - rect.top + 6) + "px";
+
+  requestAnimationFrame(() => {
+    document.addEventListener("click", closeModelPickerOnClickOutside);
+  });
+}
+
+function selectModel(modelId) {
+  store.set("model", modelId);
+  const indicator = document.getElementById("model-indicator");
+  if (indicator) {
+    const customModels = store.get("customModels") || [];
+    indicator.textContent = getModelDisplayName(modelId, customModels);
+  }
+  closeModelPicker();
+}
+
+function closeModelPicker() {
+  const picker = document.getElementById("model-picker");
+  if (picker) picker.remove();
+  document.removeEventListener("click", closeModelPickerOnClickOutside);
+}
+
+function closeModelPickerOnClickOutside(e) {
+  const picker = document.getElementById("model-picker");
+  const indicator = document.getElementById("model-indicator");
+  if (picker && !picker.contains(e.target) && e.target !== indicator) {
+    closeModelPicker();
+  }
 }
 
 // ============ Chat History Panel ============
@@ -419,11 +495,7 @@ function setupEventListeners() {
         toggleLanguage();
         break;
       case "change-model":
-        showView("settings");
-        setTimeout(() => {
-          const modelSelect = document.getElementById("model-select");
-          if (modelSelect) modelSelect.focus();
-        }, 50);
+        toggleModelPicker();
         break;
       case "toggle-history":
         toggleHistoryPanel();
