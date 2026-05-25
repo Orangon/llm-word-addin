@@ -64,9 +64,9 @@ export class ChatUI {
     const rawText = this._currentStreamText;
 
     actionsEl.innerHTML = `
-      <button class="message__action-btn" data-msg-action="insert-cursor" data-i18n="insertAtCursor">Inserisci al cursore</button>
-      <button class="message__action-btn" data-msg-action="replace-selection" data-i18n="replaceSelectionAction">Sostituisci selezione</button>
-      <button class="message__action-btn" data-msg-action="copy" data-i18n="copy">Copia</button>
+      <button class="message__action-btn" data-msg-action="insert-cursor" data-i18n="insertAtCursor">${t("insertAtCursor")}</button>
+      <button class="message__action-btn" data-msg-action="replace-selection" data-i18n="replaceSelectionAction">${t("replaceSelectionAction")}</button>
+      <button class="message__action-btn" data-msg-action="copy" data-i18n="copy">${t("copy")}</button>
     `;
 
     actionsEl.querySelectorAll("[data-msg-action]").forEach((btn) => {
