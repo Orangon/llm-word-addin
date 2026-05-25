@@ -13,6 +13,8 @@ export class ChatUI {
     this._currentStreamEl = null;
     this._currentStreamText = "";
     this._onAction = null;
+    this._isUserAtBottom = true;
+    this._setupScrollTracking();
   }
 
   setActionHandler(handler) {
@@ -21,6 +23,7 @@ export class ChatUI {
 
   renderUserMessage(text) {
     this._hideEmptyState();
+    this._isUserAtBottom = true;
     const el = this._createMessageEl("user", text);
     this.container.appendChild(el);
     this._scrollToBottom();
@@ -121,7 +124,18 @@ export class ChatUI {
     return div.innerHTML;
   }
 
+  _setupScrollTracking() {
+    const chatView = this.container.closest(".view");
+    if (!chatView) return;
+    chatView.addEventListener("scroll", () => {
+      const threshold = 50;
+      this._isUserAtBottom =
+        chatView.scrollTop + chatView.clientHeight >= chatView.scrollHeight - threshold;
+    });
+  }
+
   _scrollToBottom() {
+    if (!this._isUserAtBottom) return;
     const chatView = this.container.closest(".view");
     if (chatView) {
       chatView.scrollTop = chatView.scrollHeight;
