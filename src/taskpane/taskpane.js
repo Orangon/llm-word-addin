@@ -15,6 +15,7 @@ import { RAW_OUTPUT_SYSTEM, executeDocumentAction } from "../modules/document-lo
 import { stripMarkdown } from "../modules/markdown.js";
 import { truncateText, formatError, getModelDisplayName } from "../modules/utils.js";
 import { setLanguage, getLanguage, t } from "../modules/i18n.js";
+import { analyzeText, getScoreColor, getBarWidth } from "../modules/readability.js";
 import "../taskpane/taskpane.css";
 
 let chatUI;
